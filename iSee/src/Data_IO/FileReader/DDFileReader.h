@@ -29,6 +29,8 @@
 - (NSString *) readLine;
 - (NSString *) readTrimmedLine;
 
+- (void) backwardOneLine;
+
 #if NS_BLOCKS_AVAILABLE
 - (void) enumerateLinesUsingBlock:(void(^)(NSString*, BOOL *))block;
 #endif

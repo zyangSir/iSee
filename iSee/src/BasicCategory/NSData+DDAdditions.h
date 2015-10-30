@@ -12,4 +12,15 @@
 
 - (NSRange) rangeOfData_dd:(NSData *)dataToFind;
 
+
+/**
+ *  Finds and returns the range of the last occurrence of a given data within the receiver.
+ *
+ *  @param dataToFind  The data to search for. This value must not be nil.Raises an NSInvalidArgumentException if dataToFind is nil.
+ *
+ *  @return Returns	An NSRange structure giving the location and length in the receiver of the first occurrence of dataToFind.
+ */
+
+- (NSRange) rangeOfLastData_dd:(NSData *)dataToFind;
+
 @end

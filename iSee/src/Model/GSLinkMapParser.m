@@ -194,10 +194,42 @@
 {
     self.lastLineStr = [_linkMapfileReader readLine];
     
-    while (![self isSectionStartFlag: _lastLineStr] && _lastLineStr) {
+    while (_lastLineStr  && ![self isSectionStartFlag: _lastLineStr]) {
         [self parseOneLineSymbolLog: _lastLineStr];
-        self.lastLineStr = [_linkMapfileReader readLine];
+        self.lastLineStr = [self nextLineSymbolLog];
     }
+}
+
+/**
+ * 确保读出的是一条完整的符号信息
+ */
+- (NSString *)nextLineSymbolLog
+{
+    NSString *symbolStr = [_linkMapfileReader readLine];
+    NSString *nextLine = [_linkMapfileReader readLine];
+
+    while (nextLine && ![nextLine hasPrefix:@"0x"]) {//下一条符号信息的固定头部
+        
+        symbolStr = [symbolStr stringByAppendingString: nextLine];
+        nextLine = [_linkMapfileReader readLine];
+    }
+    
+    if ([nextLine hasPrefix: @"0x"]) {
+        //回退一行
+        
+        [_linkMapfileReader backwardOneLine];
+    }
+    
+    return symbolStr;
+}
+
+- (NSString *)nextNoNilString
+{
+    NSString *symbolStr = [_linkMapfileReader readLine];
+    while (!symbolStr) {
+        symbolStr = [_linkMapfileReader readLine];
+    }
+    return symbolStr;
 }
 
 /**
@@ -209,13 +241,16 @@
  */
 - (void)parseOneLineSymbolLog:(NSString *)oneLineLog
 {
-    if ([oneLineLog isEqualToString:@"\t"] ||
-        [oneLineLog isEqualToString:@"\n"] ||
-        [oneLineLog isEqualToString:@"\x10\n"]) {
+    //过滤非目标串
+    NSString *filtreString = @"\t * \n * \x10\n * %@\n * \r\n";
+    NSRange range = [filtreString rangeOfString: oneLineLog];
+    if (range.location != NSNotFound) {
+        
         return;
     }
+
     NSString *sizeStrPrefix = @"\t";
-    NSRange range = [oneLineLog rangeOfString: sizeStrPrefix];
+    range = [oneLineLog rangeOfString: sizeStrPrefix];
     NSUInteger sizeStrLoc = range.location + 1;
     NSUInteger sizeStrLen = 0;
     for (NSUInteger i = sizeStrLoc; i < [oneLineLog length]; ++i) {

@@ -69,6 +69,46 @@
     return [[self readLine] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 }
 
+- (void) backwardOneLine
+{
+    unsigned long long tempOffset = currentOffset - lineDelimiter.length; //jump over last delimiter string
+    NSUInteger tempChunkSize = chunkSize;
+    if (tempOffset < tempChunkSize) {
+        //have moved to file's head
+        tempOffset = 0;
+    }else{
+        tempOffset -= tempChunkSize;
+    }
+    NSData * newLineData = [lineDelimiter dataUsingEncoding:NSUTF8StringEncoding];
+    @autoreleasepool {
+        while (1) {
+            [fileHandle seekToFileOffset: tempOffset];
+            
+            NSData *preChunk =  [fileHandle readDataOfLength: tempChunkSize];
+            NSRange preDelimiterRange = {NSNotFound,0};
+            
+            preDelimiterRange = [preChunk rangeOfLastData_dd: newLineData];
+            if (preDelimiterRange.location != NSNotFound) {
+                tempOffset += (preDelimiterRange.location + 1);
+                //backward a line successfully.
+                break;
+            }
+            if (tempOffset == 0) { // have moved to file's header
+                break;
+            }
+            if (tempOffset < tempChunkSize) {
+                tempOffset = 0;
+                tempChunkSize = tempOffset;
+            }else
+            {
+                tempOffset -= tempChunkSize;
+            }
+        }
+    }
+    
+    currentOffset = tempOffset;
+}
+
 #if NS_BLOCKS_AVAILABLE
 - (void) enumerateLinesUsingBlock:(void(^)(NSString*, BOOL*))block {
     NSString * line = nil;

@@ -36,4 +36,35 @@
     return foundRange;
 }
 
+- (NSRange) rangeOfLastData_dd:(NSData *)dataToFind
+{
+    if (!dataToFind) {
+        @throw NSInvalidArgumentException;
+        return NSMakeRange(NSNotFound, 0);
+    }
+    const void * bytes = [self bytes];
+    NSUInteger length = [self length];
+    
+    const void * searchBytes = [dataToFind bytes];
+    NSUInteger searchLength = [dataToFind length];
+    NSInteger searchIndex = searchLength - 1;
+    
+    NSRange foundRange = {NSNotFound, searchLength};
+    for (NSInteger index = length - 1; index >= 0; index--) {
+        if (((char *)bytes)[index] ==  ((char *)searchBytes)[searchIndex]) {
+            if (foundRange.location == NSNotFound) {
+                foundRange.location = (NSUInteger)index;
+            }
+            searchIndex--;
+            if (searchIndex < 0) {//finish string match
+                return foundRange;
+            }
+        }else{
+            searchIndex = searchLength - 1;
+            foundRange.location = NSNotFound;
+        }
+    }
+    return foundRange;
+}
+
 @end

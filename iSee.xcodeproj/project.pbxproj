@@ -19,8 +19,8 @@
 		566122E31B79CCF4001D5057 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 566122E21B79CCF4001D5057 /* Images.xcassets */; };
 		566122E61B79CCF4001D5057 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 566122E41B79CCF4001D5057 /* Main.storyboard */; };
 		566122F21B79CCF4001D5057 /* iSeeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 566122F11B79CCF4001D5057 /* iSeeTests.m */; };
-		566B6B101BD8730D00548F4A /* ExecutableCodeItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 566B6B0F1BD8730D00548F4A /* ExecutableCodeItem.m */; settings = {ASSET_TAGS = (); }; };
-		566B6B131BD879DD00548F4A /* NSString+Split.m in Sources */ = {isa = PBXBuildFile; fileRef = 566B6B121BD879DD00548F4A /* NSString+Split.m */; settings = {ASSET_TAGS = (); }; };
+		566B6B101BD8730D00548F4A /* ExecutableCodeItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 566B6B0F1BD8730D00548F4A /* ExecutableCodeItem.m */; };
+		566B6B131BD879DD00548F4A /* NSString+Split.m in Sources */ = {isa = PBXBuildFile; fileRef = 566B6B121BD879DD00548F4A /* NSString+Split.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -253,7 +253,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0640;
-				ORGANIZATIONNAME = ___zyang.Sir___;
+				ORGANIZATIONNAME = "___zyang.Sir___";
 				TargetAttributes = {
 					566122D41B79CCF4001D5057 = {
 						CreatedOnToolsVersion = 6.4;
