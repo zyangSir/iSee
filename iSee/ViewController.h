@@ -16,6 +16,8 @@
 
 @property (nonatomic, retain) IBOutlet NSTextField *currentLevelTextField;
 
+@property (strong, nonatomic) IBOutlet NSProgressIndicator *analyzeProgressBar;
+
 
 @end
 

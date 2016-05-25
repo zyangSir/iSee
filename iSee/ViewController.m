@@ -22,10 +22,16 @@
 
 @implementation ViewController
 
+- (void)dealloc
+{
+    [self unRegistNotification];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self registNotification];
     _resultsTextView.editable = NO;
+    //_analyzeProgressBar.hidden = YES;
     // Do any additional setup after loading the view.
 }
 
@@ -41,8 +47,8 @@
     if (!_originalResults) {
         NSAlert *alertView = [[NSAlert alloc] init];
         [alertView setAlertStyle: NSAlertFirstButtonReturn];
-        [alertView setMessageText:@"提示"];
-        [alertView setInformativeText: @"请先加载linkmap文件"];
+        [alertView setMessageText:@"Tip"];
+        [alertView setInformativeText: @"Please load linkmap file."];
         [alertView beginSheetModalForWindow: [[NSApplication sharedApplication] mainWindow] completionHandler: nil];
         return;
     }
@@ -103,6 +109,14 @@
     
     SEL arcTypeHandler = @selector(onHandleArchTypeFoundMsg:);
     [[NSNotificationCenter defaultCenter] addObserver:self selector:arcTypeHandler name:ARC_TYPE_FIOUND_NOTIFICATION object: nil];
+    
+    SEL progressUpdateHanlder = @selector(onHandleAnalyzeProgressMsg:);
+    [[NSNotificationCenter defaultCenter] addObserver:self selector: progressUpdateHanlder name: ANALYZE_PROGRESS_UPDATE_NOTIFICATION object: nil];
+}
+
+- (void)unRegistNotification
+{
+    [[NSNotificationCenter defaultCenter] removeObserver: self];
 }
 
 - (void)onHandleResultsMsgDone:(NSNotification *)notification
@@ -137,6 +151,16 @@
 - (void)onHandleArchTypeFoundMsg:(NSNotification *)notification
 {
     [_arcTypeTextField setStringValue: (NSString *)notification.object];
+}
+
+- (void)onHandleAnalyzeProgressMsg:(NSNotification *)notification
+{
+    double progress = [(NSNumber *)notification.object doubleValue];
+    
+    progress *= 100;//范围转成0.0 ~ 100.0
+    dispatch_async(dispatch_get_main_queue(), ^(){
+       [_analyzeProgressBar setDoubleValue: progress];
+    });
 }
 
 @end

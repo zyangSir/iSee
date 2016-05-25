@@ -90,6 +90,11 @@
     [[NSNotificationCenter defaultCenter] postNotificationName: RESULTS_DONE_NOTIFICATION object:_objectFileArray];
 }
 
+- (void)updateAnalyzeProgress:(double)progress
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName: ANALYZE_PROGRESS_UPDATE_NOTIFICATION object: @(progress)];
+}
+
 #pragma mark - inner logic
 
 /**
@@ -143,9 +148,10 @@
             
             [tmpArray addObject: objFileItem];
         }
-        
         // one loop end, start parsing next line log
         self.lastLineStr = [_linkMapfileReader readLine];
+        double progress = [_linkMapfileReader readedFileSizeRatio];
+        [self updateAnalyzeProgress: progress];
     }
     
     self.objectFileArray = [NSArray arrayWithArray: tmpArray];
@@ -181,6 +187,7 @@
         
         //one loop end , start next circle
         self.lastLineStr = [_linkMapfileReader readLine];
+        [self updateAnalyzeProgress: _linkMapfileReader.readedFileSizeRatio];
     }
     
     self.executableCodeArray = [NSArray arrayWithArray: tmpArray];
@@ -197,6 +204,7 @@
     while (_lastLineStr  && ![self isSectionStartFlag: _lastLineStr]) {
         [self parseOneLineSymbolLog: _lastLineStr];
         self.lastLineStr = [self nextLineSymbolLog];
+        [self updateAnalyzeProgress: _linkMapfileReader.readedFileSizeRatio];
     }
 }
 

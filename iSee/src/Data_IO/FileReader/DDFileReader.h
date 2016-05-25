@@ -28,6 +28,8 @@
 
 - (NSString *) readLine;
 - (NSString *) readTrimmedLine;
+// 已读文件长度 与 文件总长度 比值, 范围0~1间
+- (double ) readedFileSizeRatio;
 
 - (void) backwardOneLine;
 

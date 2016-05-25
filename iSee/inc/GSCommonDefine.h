@@ -20,5 +20,6 @@
 
 #define RESULTS_DONE_NOTIFICATION @"resultsDone"
 #define ARC_TYPE_FIOUND_NOTIFICATION @"arcTypeFound"
+#define ANALYZE_PROGRESS_UPDATE_NOTIFICATION @"analyzeProgressUpdate"
 
 #endif

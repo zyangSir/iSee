@@ -69,6 +69,12 @@
     return [[self readLine] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 }
 
+- (double) readedFileSizeRatio
+{
+    
+    return (double)currentOffset / totalFileLength;
+}
+
 - (void) backwardOneLine
 {
     unsigned long long tempOffset = currentOffset - lineDelimiter.length; //jump over last delimiter string
